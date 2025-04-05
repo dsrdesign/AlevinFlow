@@ -1,0 +1,158 @@
+<div class="inventual-dashboard-area">
+  <div class="inventual-dashboard-sidebar" [class.sidebar-enable]="menuSidebarActive">
+    <div class="inventual-header-bar-responsive" (click)="myfunction()">
+      <mat-icon>reorder</mat-icon>
+    </div>
+    <div
+      class="inventual-menu-wrapper bg-white border-e border-b border-solid border-border py-10 px-7 lg:px-5 lg:py-8">
+      <app-menu></app-menu>
+    </div>
+    <div class="inventual-menu-overlay" (click)="myfunction()" [class.sidebar-enable]="menuSidebarActive"></div>
+  </div>
+  <div class="inventual-dashboard-main" [class.sidebar-enable]="menuSidebarActive">
+    <div class="inventual-header-area">
+      <div class="inventual-header-wrapper custom-height-70 px-7 bg-white border-b border-solid border-border">
+        <div class="grid grid-cols-12 items-center h-full">
+          <div class="col-span-12">
+            <app-header></app-header>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="inventual-breadcrumb-area px-7 py-9 bg-white mb-5">
+      <div class="inventual-breadcrumb-area-inner px-0.5">
+        <h5 class="text-[20px] text-heading font-bold mb-3">Ajouter Deces</h5>
+        <div class="inventual-breadcrumb-area-inner-wrap">
+          <span class="text-[14px] text-body font-normal inline-block me-2"><a routerLink="/deces">Gestion Deces</a></span>
+          <span class="text-[14px] text-body font-normal inline-block me-2">></span>
+          <span class="text-[14px] text-body font-normal inline-block me-2">Ajouter Deces</span>
+        </div>
+      </div>
+    </div>
+    <div class="inventual-content-area px-7">
+      <div class="inventual-addsupplier-area bg-white p-7 custom-shadow rounded-8 mb-5">
+        <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0" [formGroup]="createForm">
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Date</h5>
+              <div class="inventual-input-field-style">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                  <mat-label class="hidden"></mat-label>
+                  <input type="date" matInput [placeholder]="'Date du deces'" formControlName="date_deces">
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1"
+                    *ngIf="createForm.get('date_deces')?.invalid && (createForm.get('date_deces')?.dirty || submitted || createForm.get('date_deces')?.touched)">
+                    La date est requise !
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Quantité</h5>
+              <div class="inventual-input-field-style">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                  <mat-label class="hidden"></mat-label>
+                  <input type="number" matInput [placeholder]="'Quantité'" formControlName="quantite">
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1"
+                    *ngIf="createForm.get('quantite')?.invalid && (createForm.get('quantite')?.dirty || submitted || createForm.get('quantite')?.touched)">
+                    La quantité est requise !
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Poids</h5>
+              <div class="inventual-input-field-style">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                  <mat-label class="hidden"></mat-label>
+                  <input type="number" matInput [placeholder]="'Poids'" formControlName="poids">
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1"
+                    *ngIf="createForm.get('poids')?.invalid && (createForm.get('poids')?.dirty || submitted || createForm.get('poids')?.touched)">
+                    Le poids est requis !
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Cycle</h5>
+              <div class="inventual-select-field-style">
+                <mat-form-field>
+                  <mat-select class="block" [placeholder]="'Selectionne le cycle'" [(ngModel)]="id_cycle" formControlName="id_cycle"
+                    (valueChange)="filterAlevinByCycle()">
+                    <mat-option>Selectionne le cycle</mat-option>
+                    <mat-option *ngFor="let cycle of cycles" value={{cycle.id}}>{{cycle.nom}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1"
+                    *ngIf="createForm.get('id_cycle')?.invalid && (createForm.get('id_cycle')?.dirty || submitted || createForm.get('id_cycle')?.touched)">
+                    Le cycle est requis !
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Calibre Alevin</h5>
+              <div class="inventual-select-field-style">
+                <mat-form-field>
+                  <mat-select class="block" [placeholder]="'Select Calibre'" formControlName="id_alevinCycle">
+                    <mat-option>Select Calibre</mat-option>
+                    <mat-option *ngFor="let alevin of alevins"
+                      [value]="alevin.id">{{alevin.alevin.grammage}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1"
+                    *ngIf="createForm.get('id_alevinCycle')?.invalid && (createForm.get('id_alevinCycle')?.dirty || submitted || createForm.get('id_alevinCycle')?.touched)">
+                    Le calibre est requis !
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Lot de Géniteur</h5>
+              <div class="inventual-select-field-style">
+                <mat-form-field>
+                  <mat-select class="block" [placeholder]="'Select Role'" formControlName="id_geniteur">
+                    <mat-option>Selectionnez le lot de génieur</mat-option>
+                    <mat-option *ngFor="let geniteur of geniteurs"
+                      value={{geniteur.id}}>{{geniteur.intitule}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1"
+                    *ngIf="createForm.get('id_geniteur')?.invalid && (createForm.get('id_geniteur')?.dirty || submitted || createForm.get('id_geniteur')?.touched)">
+                    Le lot est requis !
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12">
+            <div class="inventual-material-btn pt-2.5 justify-end">
+              <button mat-raised-button color="primary" (click)="createDeces()">Ajouter deces</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="inventual-copyright-area pt-28 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0">
+      <app-copyright></app-copyright>
+    </div>
+  </div>
+</div>

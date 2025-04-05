@@ -1,0 +1,267 @@
+<div class="inventual-dashboard-area">
+    <div class="inventual-dashboard-sidebar" [class.sidebar-enable]="menuSidebarActive">
+        <div class="inventual-header-bar-responsive" (click)="myfunction()">
+            <mat-icon>reorder</mat-icon>
+        </div>
+        <div
+            class="inventual-menu-wrapper bg-white border-e border-b border-solid border-border py-10 px-7 lg:px-5 lg:py-8">
+            <app-menu></app-menu>
+        </div>
+        <div class="inventual-menu-overlay" (click)="myfunction()" [class.sidebar-enable]="menuSidebarActive"></div>
+    </div>
+    <div class="inventual-dashboard-main" [class.sidebar-enable]="menuSidebarActive">
+        <div class="inventual-header-area">
+            <div class="inventual-header-wrapper custom-height-70 px-7 bg-white border-b border-solid border-border">
+                <div class="grid grid-cols-12 items-center h-full">
+                    <div class="col-span-12">
+                        <app-header></app-header>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inventual-breadcrumb-area px-7 py-9 bg-white mb-5">
+            <div class="inventual-breadcrumb-area-inner px-0.5">
+                <h5 class="text-[20px] text-heading font-bold mb-3">Ajouter un Achat</h5>
+                <div class="inventual-breadcrumb-area-inner-wrap">
+                    <span class="text-[14px] text-body font-normal inline-block me-2"><a routerLink="/trading/purchases">Gestion des Achats</a></span>
+                    <span class="text-[14px] text-body font-normal inline-block me-2">></span>
+                    <span class="text-[14px] text-body font-normal inline-block me-2">Ajouter un Achat</span>
+                </div>
+            </div>
+        </div>
+        <div class="inventual-content-area px-7" [formGroup]="createForm">
+            <div class="inventual-addsale-area bg-white p-7 custom-shadow rounded-8 mb-5">
+                <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0">
+                    <div class="col-span-4 md:col-span-4 sm:col-span-12">
+                        <div class="inventual-calender-field mb-5">
+                            <h5 class="text-[15px] text-heading font-semibold mb-3">Date</h5>
+                            <div class="inventual-calender-field-style">
+                                <mat-form-field appearance="fill" floatLabel="always">
+                                    <mat-label class="hidden">Choose a date</mat-label>
+                                    <input matInput [matDatepicker]="picker" [placeholder]="'MM/DD/YYYY'" formControlName="date_achat">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <small>
+                                    <div class="text-danger mt-1"
+                                      *ngIf="createForm.get('date_achat')?.invalid && (createForm.get('date_achat')?.dirty || submitted || createForm.get('date_achat')?.touched)">
+                                      La date est requise !
+                                    </div>
+                                  </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4 md:col-span-4 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading font-semibold mb-3">Selectionnez le fournisseur</h5>
+                            <div class="inventual-select-field-style">
+                                <mat-form-field>
+                                    <mat-select class="block" [placeholder]="'Selectionnez un fournisseur'" formControlName="id_fournisseur">
+                                        <mat-option>Selctionnez un fournisseur</mat-option>
+                                        <mat-option *ngFor="let supplier of suppliers" value={{supplier.id}}>{{supplier.nom ? supplier.nom : supplier.nom_entreprise}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <small>
+                                    <div class="text-danger mt-1"
+                                      *ngIf="createForm.get('id_fournisseur')?.invalid && (createForm.get('id_fournisseur')?.dirty || submitted || createForm.get('id_fournisseur')?.touched)">
+                                      Le fournisseur est requis !
+                                    </div>
+                                  </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4 md:col-span-4 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading font-semibold mb-3">Selectionnez l'utilisateur </h5>
+                            <div class="inventual-select-field-style">
+                                <mat-form-field>
+                                    <mat-select class="block" [placeholder]="'Selectionnez un utilisateur'" formControlName="id_utilisateur">
+                                        <mat-option>Selctionnez un utilisateur</mat-option>
+                                        <mat-option *ngFor="let user of users" value={{user.id}}>{{user.nom}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <small>
+                                    <div class="text-danger mt-1"
+                                      *ngIf="createForm.get('id_utilisateur')?.invalid && (createForm.get('id_utilisateur')?.dirty || submitted || createForm.get('id_utilisateur')?.touched)">
+                                      L'utilisateur est requis !
+                                    </div>
+                                  </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12">
+                        <div class="relative inventual-search-filter">
+                            <div class="inventual-select-field mb-5">
+                                <h5 class="text-[15px] text-heading font-semibold mb-3">Selectionnez le Produit</h5>
+                                <div class="inventual-input-field-style">
+                                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                                        <mat-label class="hidden">Filter</mat-label>
+                                        <input matInput (keyup)="applyFilter($event); updateSearchResults($event)"
+                                            placeholder="Recherche le produits par son nom" #input>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <!-- Add a section to display search results -->
+                            <div class="inventual-search-filter-result" *ngIf="searchResults.length > 0">
+                                <ul>
+                                    <li class="single-search-item" [class.selected]="result.selected" *ngFor="let result of searchResults" (click)="toggleSelected(result)">
+                                        <div class="single-search-item-img h-[50px] w-[50px] p-2 rounded block bg-lightest">
+                                            <img src={{result.image}} alt="">
+                                        </div>
+                                        <div class="single-search-item-title">
+                                            <span>{{ result.nom }}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="search-delete-icon" *ngIf="searchResults.length > 0" (click)="hideSearchResults()"><mat-icon>clear</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inventual-common-table mb-14 mt-10">
+                    <div>
+                        <table mat-table [dataSource]="dataSource" matSort>
+            
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
+                                <td mat-cell *matCellDef="let row"> {{row.nom}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="type">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                                <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="price">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
+                                <td mat-cell *matCellDef="let row"> XAF{{row.prix_unitaire}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="stock">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Stock </th>
+                                <td mat-cell *matCellDef="let row"> {{row.stock}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="quantity">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantité </th>
+                                <td mat-cell *matCellDef="let row"> 
+                                    <div class="inventual-addsale-product-qty">
+                                        <span class="text-body flex items-center">
+                                            <button type="button" (click)="decreaseQuantity(row)"><mat-icon>remove</mat-icon></button>
+                                            <p>{{ row.quantite }}</p>
+                                            <button type="button" class="active" (click)="increaseQuantity(row)"><mat-icon>add</mat-icon></button>
+                                        </span>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tax">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Taxe </th>
+                                <td mat-cell *matCellDef="let row"> {{row.tax}}% </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="subTotal">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
+                                <td mat-cell *matCellDef="let row"> XAF{{row.prix_total | number:'1.0-0'}} </td>
+                            </ng-container>
+            
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef> Action </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <div class="sm-delete-btn">
+                                        <button class="product-delete-btn" type="button" (click)="removeProduct(row)"><mat-icon>clear</mat-icon></button>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                            <!-- Row shown when there is no matching data. -->
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="10">
+                                    <div class="table-data-not-found">
+                                        <p>Aucune donnée trouvée !</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="inventual-addsale-product-cost text-end pt-9 pb-9 border-b border-solid border-border mb-7" *ngIf="dataSource.data.length > 0">
+                            <ul>
+                                <li class="px-4 py-2.5 border-b border-solid border-border">
+                                    <span class="text-[15px] font-normal text-heading w-40 inline-block">Total TH <span class="float-end">:</span></span>
+                                    <span class="text-[15px] font-normal text-heading inline-block">XAF{{ totalAmount | number:'1.0-0' }}</span>
+                                </li>
+                                <li class="px-4 py-2.5 border-b border-solid border-border bg-gray">
+                                    <span class="text-[15px] font-normal text-heading w-40 inline-block">Total TTC <span class="float-end">:</span></span>
+                                    <span class="text-[15px] font-normal text-heading inline-block">XAF{{ totalTax | number:'1.0-0' }}</span>
+                                </li>
+                                <li class="px-4 py-2.5">
+                                    <span class="text-[15px] font-semibold text-heading w-40 inline-block">Grand Total <span class="float-end font-normal">:</span></span>
+                                    <span class="text-[15px] font-semibold text-heading inline-block">XAF{{ totalAmount - totalDiscount + totalTax + shippingValue | number:'1.0-0' }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0">
+                   
+                    <div class="col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading font-semibold mb-3">Statut de l'achat</h5>
+                            <div class="inventual-select-field-style">
+                                <mat-form-field>
+                                    <mat-select class="block" [placeholder]="'Statut de l\'achat'" formControlName="statut">
+                                        <mat-option value="Completed">Complet</mat-option>
+                                        <mat-option value="Ordered">Incomplet</mat-option>
+                                        <mat-option value="Draft">Brouillon</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <small>
+                                    <div class="text-danger mt-1"
+                                      *ngIf="createForm.get('statut')?.invalid && (createForm.get('statut')?.dirty || submitted || createForm.get('statut')?.touched)">
+                                      La statut est requise !
+                                    </div>
+                                  </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading font-semibold mb-3">Date de livraison</h5>
+                            <div class="inventual-select-field-style">
+                                <mat-form-field appearance="fill" floatLabel="always">
+                                    <mat-label class="hidden">Choose a date</mat-label>
+                                    <input matInput [matDatepicker]="picke" [placeholder]="'DD/MM/YYYY'" formControlName="date_livraison">
+                                    <mat-datepicker-toggle matSuffix [for]="picke"></mat-datepicker-toggle>
+                                    <mat-datepicker #picke></mat-datepicker>
+                                </mat-form-field>
+                                <small>
+                                    <div class="text-danger mt-1"
+                                      *ngIf="createForm.get('date_livraison')?.invalid && (createForm.get('date_livraison')?.dirty || submitted || createForm.get('date_livraison')?.touched)">
+                                      La dat de livraison est requise !
+                                    </div>
+                                  </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading font-semibold mb-3">Note de l'achat:</h5>
+                            <div class="inventual-input-field-style relative">
+                                <textarea placeholder="Entrez la description ...."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="inventual-material-btn pt-2 justify-end">
+                    <button mat-raised-button color="primary" (click)="createAchat()">Ajouter l'achat</button>
+                </div>
+            </div>
+        </div>
+        <div class="inventual-copyright-area">
+            <app-copyright></app-copyright>
+        </div>
+    </div>
+</div>

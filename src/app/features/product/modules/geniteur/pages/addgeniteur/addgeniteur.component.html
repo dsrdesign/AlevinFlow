@@ -1,0 +1,96 @@
+<div class="inventual-dashboard-area">
+  <div class="inventual-dashboard-sidebar" [class.sidebar-enable]="menuSidebarActive">
+    <div class="inventual-header-bar-responsive" (click)="myfunction()">
+      <mat-icon>reorder</mat-icon>
+    </div>
+    <div
+      class="inventual-menu-wrapper bg-white border-e border-b border-solid border-border py-10 px-7 lg:px-5 lg:py-8">
+      <app-menu></app-menu>
+    </div>
+    <div class="inventual-menu-overlay" (click)="myfunction()" [class.sidebar-enable]="menuSidebarActive"></div>
+  </div>
+  <div class="inventual-dashboard-main" [class.sidebar-enable]="menuSidebarActive">
+    <div class="inventual-header-area">
+      <div class="inventual-header-wrapper custom-height-70 px-7 bg-white border-b border-solid border-border">
+        <div class="grid grid-cols-12 items-center h-full">
+          <div class="col-span-12">
+            <app-header></app-header>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="inventual-breadcrumb-area px-7 py-9 bg-white mb-5">
+      <div class="inventual-breadcrumb-area-inner px-0.5">
+        <h5 class="text-[20px] text-heading font-bold mb-3">Ajouter géniteur</h5>
+        <div class="inventual-breadcrumb-area-inner-wrap">
+          <span class="text-[14px] text-body font-normal inline-block me-2"><a routerLink="/products/geniteurs">Gestion Géniteurs</a></span>
+          <span class="text-[14px] text-body font-normal inline-block me-2">></span>
+          <span class="text-[14px] text-body font-normal inline-block me-2">Ajouter géniteurs</span>
+        </div>
+      </div>
+    </div>
+    <div class="inventual-content-area px-7">
+      <div class="inventual-addsupplier-area bg-white p-7 custom-shadow rounded-8 mb-5">
+        <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0" [formGroup]="createForm">
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Intitulé</h5>
+              <div class="inventual-input-field-style">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                  <mat-label class="hidden"></mat-label>
+                  <input type="text" matInput [placeholder]="'Intitulé'" formControlName="intitule">
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1" *ngIf="createForm.get('intitule')?.invalid && (createForm.get('intitule')?.dirty || submitted || createForm.get('intitule')?.touched)">
+                      L'intitule est requis !
+                  </div>
+              </small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Poids géniteur male</h5>
+              <div class="inventual-input-field-style">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                  <mat-label class="hidden"></mat-label>
+                  <input type="number" matInput [placeholder]="'poids géniteur male'" formControlName="poids_male">
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1" *ngIf="createForm.get('poids_male')?.invalid && (createForm.get('poids_male')?.dirty || submitted || createForm.get('poids_male')?.touched)">
+                      Le poids geniteur male est requis !
+                  </div>
+              </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4 md:col-span-6 sm:col-span-12">
+            <div class="inventual-select-field mb-5">
+              <h5 class="text-[15px] text-heading font-semibold mb-3">Poids géniteur femelle</h5>
+              <div class="inventual-input-field-style">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                  <mat-label class="hidden"></mat-label>
+                  <input type="number" matInput [placeholder]="'Poids géniteur femelle'" formControlName="poids_femelle">
+                </mat-form-field>
+                <small>
+                  <div class="text-danger mt-1" *ngIf="createForm.get('poids_femelle')?.invalid && (createForm.get('poids_femelle')?.dirty || submitted || createForm.get('poids_femelle')?.touched)">
+                      Le poids geniteur femelle est requis !
+                  </div>
+              </small>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-12">
+            <div class="inventual-material-btn pt-2.5 justify-end">
+              <button mat-raised-button color="primary" (click)="createGeniteur()">Ajouter Décès</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="inventual-copyright-area pt-28 xl:pt-0 lg:pt-0 md:pt-0 sm:pt-0">
+      <app-copyright></app-copyright>
+    </div>
+  </div>
+</div>

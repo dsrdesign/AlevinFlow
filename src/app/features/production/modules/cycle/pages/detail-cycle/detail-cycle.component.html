@@ -1,0 +1,221 @@
+<div class="inventual-dashboard-area">
+    <div class="inventual-dashboard-sidebar" [class.sidebar-enable]="menuSidebarActive">
+        <div class="inventual-header-bar-responsive" (click)="myfunction()">
+            <mat-icon>reorder</mat-icon>
+        </div>
+        <div
+            class="inventual-menu-wrapper bg-white border-e border-b border-solid border-border py-10 px-7 lg:px-5 lg:py-8">
+            <app-menu></app-menu>
+        </div>
+        <div class="inventual-menu-overlay" (click)="myfunction()" [class.sidebar-enable]="menuSidebarActive"></div>
+    </div>
+    <div class="inventual-dashboard-main" [class.sidebar-enable]="menuSidebarActive">
+        <div class="inventual-header-area">
+            <div class="inventual-header-wrapper custom-height-70 px-7 bg-white border-b border-solid border-border">
+                <div class="grid grid-cols-12 items-center h-full">
+                    <div class="col-span-12">
+                        <app-header></app-header>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inventual-header-area">
+            <!-- Header content -->
+        </div>
+        <div class="inventual-breadcrumb-area px-7 py-9 bg-white mb-5">
+            <div class="inventual-breadcrumb-area-inner px-0.5">
+                <h5 class="text-[20px] text-heading font-bold mb-3">Détail du cycle : {{ cycle.cycle.nom }}</h5>
+                <div class="inventual-breadcrumb-area-inner-wrap">
+                    <span class="text-[14px] text-body font-normal inline-block me-2"><a routerLink="/productions/cycles">Gestion des cycles</a></span>
+                    <span class="text-[14px] text-body font-normal inline-block me-2">></span>
+                    <span class="text-[14px] text-body font-normal inline-block me-2">Détail du cycle</span>
+                </div>
+            </div>
+        </div>
+        <div class="inventual-content-area px-7">
+            <div class="inventual-cycle-detail-area bg-white p-7 custom-shadow rounded-8 mb-5">
+                <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0">
+                    <div class="col-span-4 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field row mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Nom</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ cycle.cycle.nom }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Date de début</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ cycle.cycle.date_debut | date:'dd/MM/yyyy' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Date de fin</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ cycle.cycle.date_fin ? (cycle.cycle.date_fin | date:'dd/MM/yyyy' ) : "Cycle en cours"}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Statut</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ cycle.cycle.statut }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Durée (jours)</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ cycle.cycle.duree ? cycle.cycle.duree : 'En cours' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12">
+                        <div class="inventual-material-btn pt-2.5 justify-end">
+                            <button mat-raised-button color="warn" (click)="deleteCycle()">{{cycle.cycle.statut ==
+                                "ACTIF" ?
+                                "Cloturer" : "Démarrer"}}</button>
+                            <button mat-raised-button color="primary" (click)="updateCycle()">Modifier</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="inventual-content-area px-7">
+            <div class="inventual-cycle-detail-area bg-white p-7 custom-shadow rounded-8 mb-5">
+                <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0">
+                    <div class="col-span-12">
+                        <h4 class="text-[18px] text-heading font-bold mb-5">Informations sur les Alevins</h4>
+                    </div>
+                    <div class="col-span-6 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field row mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Quantité total</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ totalAlevin }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-6 md:col-span-6 sm:col-span-12">
+                        <div class="inventual-select-field mb-5">
+                            <h5 class="text-[15px] text-heading mb-3">Quantité décédé</h5>
+                            <div class="inventual-input-field-style font-bold">
+                                <p>{{ 0 }}Kg</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12 mt-10">
+                        <table class="w-full border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100 border border-gray-300">
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Calibre</th>
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Quantité</th>
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Nombre de décès
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border border-gray-300" *ngFor="let alevin of cycle?.alevins">
+                                    <td class="px-4 py-3">{{alevin.alevin.grammage}} gr</td>
+                                    <td class="px-4 py-3">{{ alevin.quantite }} Kg</td>
+                                    <td class="px-4 py-3">{{ 0 }} Kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="inventual-content-area px-7">
+            <div class="inventual-cycle-detail-area bg-white p-7 custom-shadow rounded-8 mb-5">
+                <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0">
+                    <div class="col-span-12">
+                        <h4 class="text-[18px] text-heading font-bold mb-5">Informations sur les géniteurs</h4>
+                    </div>
+                    <div class="col-span-12 mt-10">
+                        <table class="w-full border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100 border border-gray-300">
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Geniteur</th>
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Poids des géniteurs</th>
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Poids oeufs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border border-gray-300" *ngFor="let geniteur of cycle?.geniteurs">
+                                    <td class="px-4 py-3">{{geniteur?.geniteur}} gr</td>
+                                    <td class="px-4 py-3">{{geniteur?.totalPoidsMales + geniteur?.totalPoidsFemelles}} Kg</td>
+                                    <td class="px-4 py-3">{{ geniteur?.totalPoidsOeufs  }} Kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="inventual-content-area px-7">
+            <div class="inventual-cycle-detail-area bg-white p-7 custom-shadow rounded-8 mb-5">
+                <div class="grid grid-cols-12 gap-x-7 sm:gap-x-0">
+                    <div class="col-span-12">
+                        <h4 class="text-[18px] text-heading font-bold mb-5">Informations sur les aliments</h4>
+                    </div>
+                    <div class="col-span-12">
+                        <table class="w-full border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100 border border-gray-300">
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Nom</th>
+                                    <th class="px-4 py-3 text-left text-[15px] text-heading font-bold">Quantité</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border border-gray-300" *ngFor="let aliment of cycle?.aliments">
+                                    <td class="px-4 py-3">{{aliment.nom}}</td>
+                                    <td class="px-4 py-3">{{aliment.quantite}} Kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inventual-copyright-area">
+            <app-copyright></app-copyright>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<ng-template #updateModal>
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Modifier les informations sur les alevins</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Ajouter les champs de formulaire pour modifier les informations ici -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" (click)="updateAlevin()">Enregistrer</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
